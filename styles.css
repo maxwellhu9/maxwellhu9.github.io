@@ -6,12 +6,12 @@
    ============================================================ */
 
 :root {
-  --ink:     #1d2433;
-  --muted:   #586275;
-  --line:    #e3e8ef;
-  --card:    rgba(255, 255, 255, 0.86);
-  --accent:  #2f6fde;
-  --accent-soft: #e8effc;
+  --ink:     #373644;
+  --muted:   #626373;
+  --line:    #e5dace;
+  --card:    rgba(255, 248, 236, 0.92);
+  --accent:  #546d80;
+  --accent-soft: #e6ebe8;
 
   --font-pixel: "Pixelify Sans", ui-monospace, monospace;
   --font-body: "Inter", -apple-system, "Segoe UI", sans-serif;
@@ -24,7 +24,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: #9fd3f5; /* shows for a moment before the sky draws */
+  background: #b5d4e7; /* shows for a moment before the sky draws */
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 1.0625rem;
@@ -110,19 +110,67 @@ a { color: var(--accent); text-underline-offset: 3px; }
 
 .room-wrap { display: flex; flex-direction: column; align-items: center; }
 
-/* room.js sets the width so each art pixel is a whole number of screen pixels */
+
+/* The outer stage includes the island; the room scene keeps the image ratio. */
 .room {
   position: relative;
+  aspect-ratio: 1312 / 1576;
   width: 100%;
+  max-width: 780px;
+  margin-top: 1rem;  /* keep the roof from touching the subtitle while it bobs */
   line-height: 0;
 }
 
-.room canvas, canvas.island {
+canvas.island {
   display: block;
   width: 100%;
   height: auto;
   image-rendering: pixelated;   /* keep pixels sharp when scaled up */
 }
+
+/* Both layers float together, while all room coordinates remain unchanged. */
+.room-island {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.room-scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1312 / 1199;
+  z-index: 1;
+}
+
+/* The approved illustration stays intact; the canvas holds only effects. */
+.room-art, .room-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.room-art, .room-overlay { image-rendering: pixelated; }
+
+/* Keep the original PNG intact. Clip only its baked-in sky, outside the room,
+   so the site's existing animated sky can show through around the illustration.
+   These source-image percentages include a small margin around the ink outline. */
+.room-art {
+  clip-path: polygon(6.5549% 26.3553%, 49.8476% 1.5847%, 50.9909% 1.5847%,
+    93.4451% 26.3553%, 93.2927% 74.5621%, 91.4634% 75.5630%,
+    76.2195% 84.3203%, 60.9756% 92.9108%, 50.0762% 98.9992%,
+    49.5427% 98.8324%, 30.4878% 88.2402%, 15.2439% 79.6497%,
+    7.6220% 75.3128%, 6.5549% 74.7289%);
+}
+
+.room-art, .room-overlay { pointer-events: none; }
 
 .room-hotspots { position: absolute; inset: 0; }
 
@@ -149,9 +197,9 @@ a { color: var(--accent); text-underline-offset: 3px; }
   background: var(--card);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  border: 2px solid rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(241, 222, 199, 0.95);
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(29, 36, 51, 0.12);
+  box-shadow: 0 10px 30px rgba(113, 96, 118, 0.14);
   padding: 1.6rem 1.75rem;
 }
 
@@ -225,15 +273,18 @@ h2 {
 
 .chapter:nth-of-type(even) .chapter-art { order: 2; }
 
-.chapter-art { display: flex; justify-content: center; }
+.chapter-art { display: flex; justify-content: center; min-width: 0; }
 
 /* ---- More from GitHub: small islands ---- */
 .intro { max-width: 46rem; margin: 0 auto 1.5rem; }
 
+.card.minor { padding: 1.1rem 1.5rem; }
+.card.minor h2 { font-size: 1.35rem; margin-bottom: 0.25rem; }
+
 .archipelago {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: 2rem 1.5rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* two even rows of four */
+  gap: 1.5rem 1rem;
 }
 
 .isle {
@@ -256,11 +307,12 @@ h2 {
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.95);
-  padding: 0.75rem 1rem;
-  font-size: 0.9rem;
+  border: 2px solid rgba(241, 222, 199, 0.95);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
   color: var(--muted);
   text-align: center;
+  box-shadow: 0 5px 18px rgba(117, 99, 119, 0.08);
   transition: transform 150ms;
 }
 
@@ -268,7 +320,7 @@ h2 {
   display: block;
   font-family: var(--font-pixel);
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: var(--ink);
 }
 
@@ -311,7 +363,7 @@ h2 {
   transition: transform 80ms, box-shadow 80ms;
 }
 
-.button.ghost { color: var(--ink); background: #ffffff; box-shadow: 0 4px 0 var(--line); }
+.button.ghost { color: var(--ink); background: #fff8eb; box-shadow: 0 4px 0 var(--line); }
 
 .button:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--accent); }
 
@@ -351,7 +403,7 @@ h2 {
   border-radius: 14px;
   box-shadow: 0 8px 0 rgba(29, 36, 51, 0.25);
   padding: 0;
-  background: #ffffff;
+  background: #fff8ec;
   color: var(--ink);
 }
 
@@ -397,6 +449,7 @@ h2 {
 @media (max-width: 48rem) {
   .chapter { grid-template-columns: 1fr; gap: 0.5rem; }
   .chapter:nth-of-type(even) .chapter-art { order: 0; }
+  .archipelago { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 40rem) {

@@ -20,11 +20,11 @@
 
   // ---- Time of day, keyed to how far down the page you are ----
   const STOPS = [
-    { at: 0.0,  top: '#8fcdf5', bottom: '#e6f5fe' },
-    { at: 0.4,  top: '#82c0ef', bottom: '#fdf0e0' },
-    { at: 0.7,  top: '#9a8ed6', bottom: '#f9c3a6' },
-    { at: 0.87, top: '#3b3f7a', bottom: '#8a6aa8' },
-    { at: 1.0,  top: '#1a2150', bottom: '#3a3470' },
+    { at: 0.0,  top: '#a8cfe5', bottom: '#edf4ed' },
+    { at: 0.4,  top: '#a5c6df', bottom: '#f7ead8' },
+    { at: 0.7,  top: '#afa3ca', bottom: '#e9c6b3' },
+    { at: 0.87, top: '#575574', bottom: '#9783a4' },
+    { at: 1.0,  top: '#343752', bottom: '#625975' },
   ];
   const hexToRgb = (hex) => { const n = parseInt(hex.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; };
   const lerp = (a, b, k) => a + (b - a) * k;

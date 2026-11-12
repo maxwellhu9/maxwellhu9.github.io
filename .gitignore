@@ -1,0 +1,23 @@
+# Local reference images, extraction tools, and scratch output
+/dev/
+/work/
+/outputs/
+/.codex/
+
+# Local dependencies and editor files
+/node_modules/
+/.venv/
+/venv/
+/.idea/
+/.vscode/
+.DS_Store
+*.log
+
+# Credentials and private keys
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx

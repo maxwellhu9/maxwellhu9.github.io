@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=provided-world-2">
 </head>
 <body>
   <!-- The sky behind everything (drawn by sky.js) -->
@@ -29,17 +29,22 @@
 
     <!-- ===== Hero: the room, floating on its island ===== -->
     <section class="hero">
-      <h1>Hey, I'm Maxwell.</h1>
+      <h1>Hi, I'm Max!</h1>
       <p class="hero-sub">
-        CS + stats junior at UNC Chapel Hill. This is my room.
-        Click around, or scroll down through the rest of the day.
+        I'm a CS and statistics student at UNC Chapel Hill. This is a pixel
+        version of my room. Click on things to learn more, or just scroll down.
       </p>
 
       <div class="room-wrap">
         <div class="room float">
-          <canvas id="room-canvas" role="img"
-            aria-label="Isometric pixel art of a sunny bedroom on a floating island, with a bed, a door, a bookshelf, a corkboard, a window, a desk with a computer and a Game Boy, and an orange cat."></canvas>
-          <div class="room-hotspots"></div>
+          <canvas id="room-island" class="room-island" aria-hidden="true"></canvas>
+          <div class="room-scene">
+            <img id="room-art" class="room-art" src="assets/room-daylight.png"
+              width="1312" height="1199" decoding="async" fetchpriority="high" draggable="false"
+              alt="Pixel art of a cozy bedroom on a floating grassy island with a waterfall: a desk and laptop under a sunlit window, bookshelves, trailing plants, framed landscapes, a bed with a blue and cream quilt, a nightstand, a patterned rug, three cats, and me sitting with a laptop.">
+            <canvas id="room-overlay" class="room-overlay" aria-hidden="true"></canvas>
+            <div class="room-hotspots"></div>
+          </div>
         </div>
         <p class="room-status" aria-live="polite">Click anything in the room.</p>
       </div>
@@ -50,16 +55,12 @@
       <article class="card" id="about">
         <h2>About</h2>
         <p>
-          I'm a junior at UNC Chapel Hill studying computer science and statistics.
-          I like projects that are a little too big for a weekend: a Game Boy
-          emulator, a fake stock exchange full of trading bots, a system that
-          checks aerospace software against NASA standards.
+          I'm a junior at UNC Chapel Hill studying computer science and statistics,
+          graduating in 2028. I'm most interested in systems programming and
+          applied AI, and I like figuring out how things work by building them
+          myself. When I'm not coding, I'm usually baking something or painting,
+          or looking for a new coffee shop to work from around Chapel Hill.
         </p>
-        <ul class="facts">
-          <li><span>Studying</span>B.S. Computer Science + Statistics, May 2028 · 3.82 GPA</li>
-          <li><span>Now</span>AI Studio fellow, NASA × Break Through Tech</li>
-          <li><span>Summer '26</span>Software engineering intern at SAS</li>
-        </ul>
       </article>
     </section>
 
@@ -73,9 +74,10 @@
           <h3>DMG-01</h3>
           <p class="tag">TypeScript · Vite · Vitest</p>
           <p>
-            A Game Boy emulator that runs in the browser. I rebuilt the processor,
-            graphics, and sound chips instruction by instruction, and it plays real
-            games at 60 fps. Drag in a ROM and it saves your progress.
+            A Game Boy emulator I built from scratch. It recreates the original
+            console's processor, graphics, and sound well enough to play real games
+            in your browser at full speed, with sound and saves. Getting the timing
+            exactly right was the hardest part.
           </p>
           <div class="links">
             <a class="button" href="https://maxwellhu9.github.io/dmg01/">Play it</a>
@@ -91,10 +93,10 @@
           <h3>Paper Trading Exchange</h3>
           <p class="tag">Python · FastAPI · PostgreSQL · React · Docker</p>
           <p>
-            A fake stock exchange with a real order book. You trade against four
-            kinds of bots (value, momentum, noise, market makers), then hit the
-            market with news or a flash crash and watch it react. Momentum traders
-            made prices swing 6.7× more. Removing the market makers made trading
+            A simulated stock market where you trade against four kinds of bots,
+            each with its own strategy. You can also trigger news or a flash crash
+            and watch how prices react. In my experiments, momentum traders made
+            prices swing 6.7× more, and removing the market makers made trading
             2.6× more expensive.
           </p>
           <div class="links">
@@ -111,11 +113,10 @@
           <h3>NASA × Break Through Tech</h3>
           <p class="tag">Gemini · LangChain · Pydantic</p>
           <p>
-            As an AI Studio fellow, I'm building a RAG system that audits aerospace
-            software requirements against NASA standards. It agrees with human
-            reviewers on 85% of 54 requirements, and every citation gets checked
-            against 62 approved NASA clauses. Fixing how documents get chunked took
-            retrieval accuracy from 57% to 91%.
+            An AI tool that reviews a spacecraft's software requirements against
+            NASA's standards and points to the exact rule behind each issue it
+            finds. It agrees with human reviewers 85% of the time, and we improved
+            how often it finds the right rules from 57% to 91%.
           </p>
         </article>
       </section>
@@ -124,55 +125,56 @@
         <div class="chapter-art"><canvas class="island float" data-island="hotel" aria-hidden="true"></canvas></div>
         <article class="card" id="research">
           <p class="kicker">Research</p>
-          <h3>Can an LLM tell it's being played?</h3>
+          <h3>How LLMs make decisions with biased information</h3>
           <p class="tag">UNC School of Data Science and Society · Aug 2025 – now</p>
           <p>
-            A commission-paid advisor shows a language model one hand-picked hotel
-            review per round. I compare LLM agents against Thompson Sampling in this
-            game, running Qwen2.5-7B with vLLM on H100s over 7,474 real Booking.com
-            reviews from 1,068 hotels.
+            Can an AI model tell when the information it's given is biased? In our
+            setup, an advisor who earns a commission shows the model one hand-picked
+            hotel review at a time, and the model has to learn how much to trust it.
+            I compare how AI models handle this against a standard statistics
+            approach, using about 7,500 real hotel reviews.
           </p>
         </article>
       </section>
 
       <!-- ===== The rest of my GitHub, as small islands ===== -->
       <section class="section wide">
-        <div class="card intro">
+        <div class="card intro minor">
           <h2>More from my GitHub</h2>
-          <p>Smaller things, hackathon builds, and experiments.</p>
+          <p>Other projects, including hackathon builds and things I made for fun.</p>
         </div>
         <div class="archipelago">
           <a class="isle" href="https://maxwellhu9.github.io/time-machine/">
-            <canvas class="island float" data-island="mini" data-tree="round" data-accent="#4f8fd6" aria-hidden="true"></canvas>
-            <span class="isle-card"><b>time-machine</b>Finds the countries whose past looks most like yours, then forecasts.</span>
+            <canvas class="island float" data-island="mini" data-project="time-machine" aria-hidden="true"></canvas>
+            <span class="isle-card"><b>time-machine</b>Forecasts a country's future from countries that looked like it in the past.</span>
           </a>
           <a class="isle" href="https://github.com/maxwellhu9/chomper">
-            <canvas class="island float" data-island="mini" data-tree="palm" data-accent="#ff6b6b" aria-hidden="true"></canvas>
-            <span class="isle-card"><b>chomper</b>A webcam game where you chomp flying fruit with your mouth.</span>
+            <canvas class="island float" data-island="mini" data-project="chomper" aria-hidden="true"></canvas>
+            <span class="isle-card"><b>chomper</b>A webcam game where you catch food with your mouth. Built at HackNC.</span>
           </a>
           <a class="isle" href="https://github.com/maxwellhu9/desk-dragon">
-            <canvas class="island float" data-island="mini" data-tree="pine" data-accent="#7fb4ff" aria-hidden="true"></canvas>
-            <span class="isle-card"><b>desk-dragon</b>A little dino that wanders your Mac desktop and teaches you tricks.</span>
+            <canvas class="island float" data-island="mini" data-project="desk-dragon" aria-hidden="true"></canvas>
+            <span class="isle-card"><b>desk-dragon</b>A small macOS desktop pet that reacts to your cursor. Swift.</span>
           </a>
           <a class="isle" href="https://github.com/maxwellhu9/mood-ring">
-            <canvas class="island float" data-island="mini" data-tree="blossom" data-accent="#9b7fd1" aria-hidden="true"></canvas>
-            <span class="isle-card"><b>mood-ring</b>Sorts text into six emotions with DistilBERT at 92.7% accuracy.</span>
+            <canvas class="island float" data-island="mini" data-project="mood-ring" aria-hidden="true"></canvas>
+            <span class="isle-card"><b>mood-ring</b>Text emotion classifier. DistilBERT at 92.7% vs. 86.9% for a baseline.</span>
           </a>
           <a class="isle" href="https://github.com/maxwellhu9/cooldown">
-            <canvas class="island float" data-island="mini" data-tree="round" data-accent="#5bc0c9" aria-hidden="true"></canvas>
-            <span class="isle-card"><b>cooldown</b>Talks you out of impulse buys, built on Capital One's Nessie API.</span>
+            <canvas class="island float" data-island="mini" data-project="cooldown" aria-hidden="true"></canvas>
+            <span class="isle-card"><b>cooldown</b>Adds a waiting period before impulse buys, using Capital One's Nessie API.</span>
           </a>
           <a class="isle" href="https://github.com/maxwellhu9/yer-a-wizard-harry">
-            <canvas class="island float" data-island="mini" data-tree="pine" data-accent="#9b7fd1" aria-hidden="true"></canvas>
-            <span class="isle-card"><b>yer-a-wizard-harry</b>A VR wizard game in Unity where you cast spells by saying them.</span>
+            <canvas class="island float" data-island="mini" data-project="yer-a-wizard-harry" aria-hidden="true"></canvas>
+            <span class="isle-card"><b>yer-a-wizard-harry</b>A Unity VR prototype where you cast spells by voice.</span>
           </a>
           <a class="isle" href="https://github.com/maxwellhu9/gatherly">
-            <canvas class="island float" data-island="mini" data-tree="blossom" data-accent="#f2c94c" aria-hidden="true"></canvas>
-            <span class="isle-card"><b>gatherly</b>An iOS app for finding social events happening near you.</span>
+            <canvas class="island float" data-island="mini" data-project="gatherly" aria-hidden="true"></canvas>
+            <span class="isle-card"><b>gatherly</b>An iOS app for finding and RSVPing to local events. SwiftUI.</span>
           </a>
           <a class="isle" href="https://github.com/maxwellhu9/layover">
-            <canvas class="island float" data-island="mini" data-tree="palm" data-accent="#e86f51" aria-hidden="true"></canvas>
-            <span class="isle-card"><b>layover</b>A SwiftUI travel planner with maps, places, and itineraries.</span>
+            <canvas class="island float" data-island="mini" data-project="layover" aria-hidden="true"></canvas>
+            <span class="isle-card"><b>layover</b>A SwiftUI travel app for places, itineraries, and favorites.</span>
           </a>
         </div>
       </section>
@@ -185,24 +187,41 @@
 
         <div class="entry">
           <div class="entry-head">
-            <h3>NASA × Break Through Tech</h3>
-            <span class="when">Aug 2026 – now</span>
-          </div>
-          <p class="role">AI Studio Fellow</p>
-          <p>RAG compliance auditor for aerospace software requirements. 85% agreement with human reviewers; retrieval accuracy from 57% to 91%.</p>
-        </div>
-
-        <div class="entry">
-          <div class="entry-head">
             <h3>SAS</h3>
             <span class="when">May – Aug 2026</span>
           </div>
           <p class="role">Software Development Engineer Intern</p>
           <p>
-            I automated my team's first patch-release testing in Jenkins, so
-            version-specific test suites run on their own instead of by hand.
-            I also added exponential-backoff retries in C for flaky REST calls,
-            which cut Databricks pipeline failures by 40%.
+            Automated my team's patch-release testing, so the right tests run for
+            each version automatically instead of being checked by hand. I also
+            added automatic retries for temporary network errors, which cut failed
+            data pipeline runs by 40%.
+          </p>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h3>NASA × Break Through Tech</h3>
+            <span class="when">Aug 2026 – now</span>
+          </div>
+          <p class="role">AI Studio Fellow</p>
+          <p>
+            Building an AI tool that checks spacecraft software requirements against
+            NASA standards. I built the answer key we use to grade it, and improved
+            how often it finds the right rules from 57% to 91%.
+          </p>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <h3>App Team Carolina</h3>
+            <span class="when">Jan 2025 – now</span>
+          </div>
+          <p class="role">iOS Developer</p>
+          <p>
+            Built Layover, an iOS travel-planning app for finding places, planning
+            itineraries, and saving favorites, with maps and directions built in.
+            I also set up the backend for accounts and saved data.
           </p>
         </div>
 
@@ -213,10 +232,9 @@
           </div>
           <p class="role">Software Engineer</p>
           <p>
-            We're building a learning platform in Next.js and tRPC for the NC
-            Center for Nonprofits, used by 50+ leaders. I built the discussion
-            forums and the role-based access that took most of the manual work
-            out of onboarding.
+            Building a learning platform for the NC Center for Nonprofits, used by
+            50+ leaders. The discussion forums I built raised engagement by 45%, and
+            the access system I built cut admin onboarding work by 60%.
           </p>
         </div>
       </article>
@@ -228,11 +246,11 @@
         <h2>Skills</h2>
         <dl class="skills">
           <dt>Languages</dt>
-          <dd>Python, Java, TypeScript, JavaScript, C, C++, Go, SQL, Swift, R, Groovy</dd>
+          <dd>Python, TypeScript, JavaScript, Java, C, SQL, Swift</dd>
           <dt>Frameworks</dt>
-          <dd>React, Next.js, FastAPI, PyTorch, LangChain, pandas, NumPy, Tailwind, SwiftUI</dd>
+          <dd>React, Next.js, FastAPI, PyTorch, LangChain, pandas</dd>
           <dt>Tools</dt>
-          <dd>Git, Docker, Kubernetes, PostgreSQL, Supabase, GitHub Actions, Jenkins, Vercel</dd>
+          <dd>Git, Docker, PostgreSQL, GitHub Actions, Jenkins</dd>
         </dl>
       </article>
     </section>
@@ -241,7 +259,7 @@
     <section class="section last">
       <article class="card" id="contact">
         <h2>Contact</h2>
-        <p>Want to talk internships, emulators, or order books? Email me.</p>
+        <p>Feel free to reach out! I'm always happy to connect.</p>
         <a class="contact-email" href="mailto:maxhu357@gmail.com">maxhu357@gmail.com</a>
         <div class="links">
           <a class="button ghost" href="https://github.com/maxwellhu9">GitHub</a>
@@ -253,7 +271,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>© 2026 Maxwell Hu · Every pixel here is drawn in code. Goodnight.</p>
+    <p>© 2026 Maxwell Hu</p>
   </footer>
 
   <!-- Popup that opens when you click something in the room -->
@@ -267,9 +285,8 @@
     </div>
   </dialog>
 
-  <script src="iso.js"></script>
-  <script src="sky.js"></script>
-  <script src="room.js"></script>
-  <script src="islands.js"></script>
+  <script src="sky.js?v=provided-world-2"></script>
+  <script src="room.js?v=island-detail-1"></script>
+  <script src="islands.js?v=provided-world-2"></script>
 </body>
 </html>
