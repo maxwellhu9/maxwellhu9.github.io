@@ -8,8 +8,8 @@
 :root {
   --ink:     #373644;
   --muted:   #626373;
-  --line:    #e5dace;
-  --card:    rgba(255, 248, 236, 0.92);
+  --line:    #e3e8ef;
+  --card:    rgba(255, 255, 255, 0.92);
   --accent:  #546d80;
   --accent-soft: #e6ebe8;
 
@@ -197,7 +197,7 @@ canvas.island {
   background: var(--card);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  border: 2px solid rgba(241, 222, 199, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.95);
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(113, 96, 118, 0.14);
   padding: 1.6rem 1.75rem;
@@ -307,7 +307,7 @@ h2 {
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   border-radius: 12px;
-  border: 2px solid rgba(241, 222, 199, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.95);
   padding: 0.6rem 0.8rem;
   font-size: 0.82rem;
   color: var(--muted);
@@ -363,7 +363,7 @@ h2 {
   transition: transform 80ms, box-shadow 80ms;
 }
 
-.button.ghost { color: var(--ink); background: #fff8eb; box-shadow: 0 4px 0 var(--line); }
+.button.ghost { color: var(--ink); background: #ffffff; box-shadow: 0 4px 0 var(--line); }
 
 .button:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--accent); }
 
@@ -403,7 +403,7 @@ h2 {
   border-radius: 14px;
   box-shadow: 0 8px 0 rgba(29, 36, 51, 0.25);
   padding: 0;
-  background: #fff8ec;
+  background: #ffffff;
   color: var(--ink);
 }
 

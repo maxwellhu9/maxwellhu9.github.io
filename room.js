@@ -138,7 +138,7 @@
       loaded = true; render();
     }, { once: true });
     image.addEventListener('error', () => console.warn('Unable to load the room island artwork.'), { once: true });
-    image.src = 'assets/world/room-island-detailed.png';
+    image.src = 'assets/world/room-island-detailed.webp';
     return render;
   }
 

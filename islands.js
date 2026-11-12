@@ -105,7 +105,7 @@
     };
     art.addEventListener('load', scene.render);
     art.addEventListener('error', () => console.warn(`Unable to load project artwork: ${name}`));
-    art.src = `assets/world/${name}.png`;
+    art.src = `assets/world/${name}.webp`;
     scene.fit(); scene.render();
     canvas.style.animationDelay = `${-(index * 1.3) % 6}s`;
     scenes.push(scene);
