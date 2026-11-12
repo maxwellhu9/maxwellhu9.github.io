@@ -394,51 +394,61 @@ h2 {
   color: #d9ddf2;
 }
 
-/* ---- Popup window (opened from the room) ---- */
+/* ---- Popup (opened from the room) ----
+   It shows an exact copy of the matching card from the page, so the
+   popup looks the same as the card you'd find by scrolling. */
 .panel {
   margin: auto;
   width: min(36rem, calc(100% - 2rem));
   max-height: calc(100vh - 4rem);
-  border: 3px solid var(--ink);
-  border-radius: 14px;
-  box-shadow: 0 8px 0 rgba(29, 36, 51, 0.25);
+  border: 0;
   padding: 0;
-  background: #ffffff;
+  background: transparent;
+  overflow: visible;
   color: var(--ink);
 }
 
 .panel::backdrop { background: rgba(29, 36, 51, 0.35); }
 
-.panel-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--ink);
-  color: #ffffff;
-  padding: 0.4rem 0.6rem 0.4rem 1rem;
-  position: sticky;
-  top: 0;
+.panel-inner { position: relative; }
+
+/* The title is still there for screen readers, just not shown twice */
+.panel-title {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
-.panel-title { font-size: 1.2rem; margin: 0; }
-
 .panel-close {
-  font-family: var(--font-pixel);
-  font-size: 1.5rem;
-  line-height: 1;
+  position: absolute;
+  top: 0.6rem;
+  right: 0.7rem;
+  z-index: 1;
   width: 2rem;
   height: 2rem;
+  font-family: var(--font-pixel);
+  font-size: 1.4rem;
+  line-height: 1;
   background: none;
-  color: #ffffff;
+  color: var(--muted);
   border: 0;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-.panel-close:hover { color: #8fcdf2; }
+.panel-close:hover { color: var(--ink); background: rgba(29, 36, 51, 0.06); }
 
-.panel-body { padding: 1.25rem 1.4rem 1.5rem; }
+/* Project cards use the pixel title font on the page, so match it here */
+.panel-body .card:has(> .kicker) > h3 { font-family: var(--font-pixel); font-size: 1.6rem; line-height: 1.2; }
 
-.panel-body > p { color: var(--muted); }
+.panel-body .card {
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(29, 36, 51, 0.25);
+}
 
 /* ---- Respect "reduce motion" ---- */
 @media (prefers-reduced-motion: reduce) {

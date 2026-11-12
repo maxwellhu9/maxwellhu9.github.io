@@ -283,14 +283,11 @@
     if (!source) return;
     const heading = source.querySelector('h2, h3');
     panelTitle.textContent = heading ? heading.textContent : object.label;
-    panelBody.replaceChildren();
-    for (const child of source.children) {
-      if (child === heading) continue;
-      const copy = child.cloneNode(true);
-      copy.removeAttribute('id');
-      copy.querySelectorAll('[id]').forEach(node => node.removeAttribute('id'));
-      panelBody.appendChild(copy);
-    }
+    // Show an exact copy of the card from the page, so they always match
+    const copy = source.cloneNode(true);
+    copy.removeAttribute('id');
+    copy.querySelectorAll('[id]').forEach(node => node.removeAttribute('id'));
+    panelBody.replaceChildren(copy);
     dialog.showModal();
   }
   dialog.querySelector('.panel-close').addEventListener('click', () => dialog.close());
