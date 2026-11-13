@@ -171,6 +171,9 @@
     { id: 'cat', label: 'Byte the cat · pet her', target: null,
       rect: [646, 898, 149, 93],
       shape: [[655, 898], [712, 904], [757, 899], [790, 919], [795, 968], [773, 987], [678, 991], [646, 971]] },
+    // A tiny heart for Mia. Clicking it three times shows a note just for her.
+    { id: 'photo', label: 'Photo', target: null, secret: true,
+      rect: [306, 538, 30, 28] },
   ];
 
   function position(el, [x, y, width, height]) {
@@ -234,12 +237,40 @@
     }
   }
   function drawHearts() {
-    const [x, y] = xy(703, 879);
     for (const heart of hearts) {
+      const [x, y] = xy(heart.ax ?? 703, heart.ay ?? 879);
       ctx.globalAlpha = Math.min(1, heart.life / 20);
-      sprite(HEART, x + heart.dx, y + heart.y, { p: '#ff7aa2' });
+      sprite(HEART, x + heart.dx, y + heart.y, { p: heart.color || '#ff7aa2' });
     }
     ctx.globalAlpha = 1;
+  }
+
+  // The little photo frame on the nightstand: a wooden frame, a cream mat,
+  // and a pink photo with a heart in it
+  // A little heart for Mia, tucked on top of the bookshelf beside the plant.
+  // Drawn in 2-pixel blocks: a pale shine on the upper left and a darker
+  // rose underside, like the other small objects in the room.
+  const HEART_ART = [
+    '.HHH.HHH.',
+    'HwwHHHhhH',
+    'HwHHHHHhH',
+    'HHHHHHHhH',
+    '.HHHHHhh.',
+    '..HHhhh..',
+    '...hhh...',
+    '....h....',
+  ];
+  const HEART_PAL = { H: '#e0707e', h: '#b9505f', w: '#ffdce0' };
+  const HEART_PX = 2, HEART_AT = [312, 544];
+  function drawPhoto() {
+    const [x0, y0] = HEART_AT;
+    HEART_ART.forEach((row, j) => {
+      for (let i = 0; i < row.length; i++) {
+        if (row[i] === '.') continue;
+        ctx.fillStyle = HEART_PAL[row[i]];
+        ctx.fillRect(x0 + i * HEART_PX, y0 + j * HEART_PX, HEART_PX, HEART_PX);
+      }
+    });
   }
   function drawBrackets(object) {
     const [x, y, w, h] = object.rect;
@@ -269,7 +300,7 @@
     drawIsland(t);
     ctx.clearRect(0, 0, ART.width, ART.height);
     if (!ready) return;
-    drawAmbient(); drawHearts(); drawHi();
+    drawAmbient(); drawPhoto(); drawHearts(); drawHi();
     if (hovered) drawBrackets(hovered);
     else drawSparkle();
   }
@@ -293,6 +324,28 @@
   dialog.querySelector('.panel-close').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
 
+  // The note for Mia appears above the photo after three clicks in a row
+  const note = document.createElement('div');
+  note.className = 'room-note';
+  note.setAttribute('role', 'status');
+  note.textContent = 'love you 5000 mia';
+  position(note, [222, 470, 200, 40]);
+  layer.parentElement.appendChild(note);
+  let photoClicks = 0, photoTimer = 0, noteTimer = 0;
+  function clickPhoto() {
+    photoClicks += 1;
+    clearTimeout(photoTimer);
+    photoTimer = setTimeout(() => { photoClicks = 0; }, 1500);   // the three clicks have to be close together
+    if (photoClicks < 3) return;
+    photoClicks = 0;
+    note.classList.add('show');
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(() => note.classList.remove('show'), motion.matches ? 8000 : 4500);
+    for (let i = 0; i < 8; i++) {
+      hearts.push({ ax: 321, ay: 540, dx: Math.round((i - 3.5) * 2.5), y: -2 - (i % 3) * 3, life: 70 + i * 8, color: i % 2 ? '#ff7aa2' : '#e9546b' });
+    }
+  }
+
   layer.replaceChildren();
   for (const object of OBJECTS) {
     const button = document.createElement('button');
@@ -306,6 +359,7 @@
       button.style.clipPath = `polygon(${object.shape.map(([px, py]) => `${(px - x) / w * 100}% ${(py - y) / h * 100}%`).join(',')})`;
     }
     const show = () => {
+      if (object.secret) return;                     // the secret photo gives nothing away on hover
       hovered = object;
       if (status) status.textContent = object.label;
       drawOverlay();
@@ -323,6 +377,7 @@
       clicked = true;
       if (object.target) openPanel(object);
       else if (object.id === 'max') hiUntil = motion.matches ? Infinity : t + 150;
+      else if (object.id === 'photo') clickPhoto();
       else if (object.id === 'cat') {
         for (let i = 0; i < 3; i++) hearts.push({ dx: i * 4 - 4, y: -2 - i * 3, life: 60 + i * 10 });
       }

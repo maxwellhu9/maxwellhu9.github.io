@@ -468,3 +468,33 @@ h2 {
   .skills dd { margin-bottom: 0.6rem; }
   .card { padding: 1.25rem; }
 }
+
+/* ---- A note for Mia (three clicks on the little photo on the nightstand) ---- */
+.hotspot[data-room-object="photo"] { cursor: default; }
+.hotspot[data-room-object="photo"]:focus-visible { outline: none; }
+
+.room-note {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-pixel);
+  font-size: clamp(0.7rem, 1.6vw, 1rem);
+  white-space: nowrap;
+  color: #e9546b;
+  background: #fffaf3;
+  border: 2px solid #f7c6d4;
+  border-radius: 10px;
+  box-shadow: 0 4px 0 rgba(233, 84, 107, 0.18);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+.room-note.show { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .room-note { transition: none; transform: none; }
+}
