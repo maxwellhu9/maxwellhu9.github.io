@@ -498,3 +498,42 @@ h2 {
 @media (prefers-reduced-motion: reduce) {
   .room-note { transition: none; transform: none; }
 }
+
+/* ---- Speech bubble when you click me in the room ---- */
+.room-say {
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, calc(-100% + 6px));
+  padding: 0.25em 0.75em;
+  font-family: var(--font-pixel);
+  font-size: clamp(0.7rem, 1.6vw, 1rem);
+  line-height: 1.5;
+  white-space: nowrap;
+  color: var(--ink);
+  background: #ffffff;
+  border: 2px solid rgba(29, 36, 51, 0.15);
+  border-radius: 10px;
+  box-shadow: 0 4px 0 rgba(29, 36, 51, 0.12);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+
+.room-say::after {                     /* little tail pointing down at me */
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border-right: 2px solid rgba(29, 36, 51, 0.15);
+  border-bottom: 2px solid rgba(29, 36, 51, 0.15);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.room-say.show { opacity: 1; transform: translate(-50%, -100%); }
+
+@media (prefers-reduced-motion: reduce) {
+  .room-say { transition: none; }
+}

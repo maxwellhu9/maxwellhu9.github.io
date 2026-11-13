@@ -168,9 +168,11 @@
     { id: 'max', label: 'Max · say hi', target: null,
       rect: [498, 703, 158, 250],
       shape: [[514, 703], [619, 703], [656, 773], [643, 855], [643, 933], [601, 953], [509, 924], [498, 788]] },
-    { id: 'cat', label: 'Byte the cat · pet her', target: null,
+    { id: 'cat', label: 'Yaya the cat · pet her', target: null,
       rect: [646, 898, 149, 93],
       shape: [[655, 898], [712, 904], [757, 899], [790, 919], [795, 968], [773, 987], [678, 991], [646, 971]] },
+    { id: 'mia', label: 'Mia the cat · pet her', target: null,
+      rect: [290, 790, 112, 74] },
     // A tiny heart for Mia. Clicking it three times shows a note just for her.
     { id: 'photo', label: 'Photo', target: null, secret: true,
       rect: [306, 538, 30, 28] },
@@ -207,7 +209,6 @@
   let t = 0;
   let last = 0;
   let raf = 0;
-  let hiUntil = 0;
   let hovered = null;
   let clicked = false;
   let sparkle = null;
@@ -223,18 +224,6 @@
       pixel(px, py, 1, 1, '#fff1c7');
     });
     ctx.globalAlpha = 1;
-  }
-  function drawHi() {
-    if (t >= hiUntil) return;
-    const [x, y] = xy(627, 681);
-    pixel(x, y, 13, 8, '#fff9ed');
-    pixel(x - 1, y + 1, 15, 6, '#fff9ed');
-    pixel(x + 1, y + 8, 2, 2, '#fff9ed');
-    let cursor = x + 2;
-    for (const ch of 'hi!') {
-      sprite(FONT[ch], cursor, y + 2, { h: '#553b39' });
-      cursor += FONT[ch][0].length + 1;
-    }
   }
   function drawHearts() {
     for (const heart of hearts) {
@@ -300,7 +289,7 @@
     drawIsland(t);
     ctx.clearRect(0, 0, ART.width, ART.height);
     if (!ready) return;
-    drawAmbient(); drawPhoto(); drawHearts(); drawHi();
+    drawAmbient(); drawPhoto(); drawHearts();
     if (hovered) drawBrackets(hovered);
     else drawSparkle();
   }
@@ -323,6 +312,28 @@
   }
   dialog.querySelector('.panel-close').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+
+  // Clicking me cycles through a few messages in a speech bubble above my head
+  const MESSAGES = [
+    'hi!',
+    'welcome to my room',
+    'click around to see my projects',
+    "that's Yaya, and that's Mia",
+    'thanks for stopping by',
+  ];
+  const say = document.createElement('div');
+  say.className = 'room-say';
+  say.setAttribute('role', 'status');
+  Object.assign(say.style, { left: `${580 / ART.width * 100}%`, top: `${690 / ART.height * 100}%` });
+  layer.parentElement.appendChild(say);
+  let messageIndex = -1, sayTimer = 0;
+  function sayNext() {
+    messageIndex = (messageIndex + 1) % MESSAGES.length;
+    say.textContent = MESSAGES[messageIndex];
+    say.classList.add('show');
+    clearTimeout(sayTimer);
+    sayTimer = setTimeout(() => say.classList.remove('show'), motion.matches ? 6000 : 3500);
+  }
 
   // The note for Mia appears above the photo after three clicks in a row
   const note = document.createElement('div');
@@ -376,10 +387,12 @@
     button.addEventListener('click', () => {
       clicked = true;
       if (object.target) openPanel(object);
-      else if (object.id === 'max') hiUntil = motion.matches ? Infinity : t + 150;
+      else if (object.id === 'max') sayNext();
       else if (object.id === 'photo') clickPhoto();
       else if (object.id === 'cat') {
         for (let i = 0; i < 3; i++) hearts.push({ dx: i * 4 - 4, y: -2 - i * 3, life: 60 + i * 10 });
+      } else if (object.id === 'mia') {
+        for (let i = 0; i < 3; i++) hearts.push({ ax: 345, ay: 795, dx: i * 4 - 4, y: -2 - i * 3, life: 60 + i * 10 });
       }
       drawOverlay();
     });
@@ -422,7 +435,6 @@
   }).observe(room);
   document.addEventListener('visibilitychange', syncAnimation);
   motion.addEventListener('change', () => {
-    if (!motion.matches && hiUntil === Infinity) hiUntil = t + 150;
     syncAnimation();
   });
   drawOverlay();
